@@ -14,10 +14,19 @@ namespace FoodieApi.Services
             foodcollection = foodb.GetCollection<Foods>(dbSettings.Value.CollectionName);
         }
 
-        public async Task<List<Foods>> GetAsync()
-            => await foodcollection.Find(_ => true).ToListAsync();
+        //public async Task<List<Foods>> GetAsync()
+        //    => await foodcollection.Find(_ => true).ToListAsync();
 
 
+        public async Task<List<Foods>> GettheFood()
+        {
+            return await foodcollection.Find(_ => true).ToListAsync();
+        }
+
+        public async Task InsertFoodDetails(Foods foods)
+        {
+            await foodcollection.InsertOneAsync(foods);
+        }
 
     }
 }

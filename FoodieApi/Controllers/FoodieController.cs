@@ -16,7 +16,16 @@ namespace FoodieApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Foods>> Get() =>
-            await _foodservices.GetAsync();
+        public async Task<List<Foods>> Get()
+        {
+           return await _foodservices.GettheFood();
+        }
+
+        [HttpPost]
+        public async Task<OkObjectResult> Insert(Foods foods)
+        {
+            await _foodservices.InsertFoodDetails(foods);
+            return Ok(foods);
+        }
     }
 }
