@@ -16,19 +16,9 @@ namespace FoodyApi.Controllers
         public FoodController(FoodDbContext foodDbContext)
         {
             this._foodDbContext = foodDbContext;
-        }
+        }       
 
-        //[HttpGet]
-        //public ArrayList ListofFoods()
-        //{
-        //    ArrayList Foods = new ArrayList();
-        //    Foods.Add("Roti");
-        //    Foods.Add("Dosa");
-        //    Foods.Add("Biriyani");
-
-        //    return Foods;
-        //}
-
+        //Retrieve
         [HttpGet]
         public IActionResult GetFoods()
         {
@@ -36,19 +26,50 @@ namespace FoodyApi.Controllers
             return Ok(foodlist);
         }
 
+
+        //Insert
         [HttpPost]
-        public IActionResult InsertFoodInfo([FromBody]FoodInfo foods)
+        public IActionResult InsertFoodInfo([FromBody] FoodInfo foods)
         {
             _foodDbContext.FoodInfos.Add(foods);
             _foodDbContext.SaveChanges();
 
-            return Ok(foods);            
+            return Ok(foods);
         }
 
-        //[HttpPost]
-        //public string InsertWeather(string Foodname)
-        //{
-        //    return string.Format("Your selection is {0}", Foodname);
-        //}
+
+        //Update
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult UpdateFoodInfo(int id, [FromBody] FoodInfo foods)
+        {
+            var existingItem = _foodDbContext.FoodInfos.FirstOrDefault(x => x.Id == id);
+            if (existingItem != null)
+            {
+                existingItem.FoodName = foods.FoodName;
+                existingItem.FoodDescription = foods.FoodDescription;
+                existingItem.Available = foods.Available;
+                existingItem.Quantity = foods.Quantity;
+
+                _foodDbContext.SaveChanges();
+                return Ok(existingItem);
+            }
+            return NotFound("Item not found");
+        }
+
+        //Delete
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteFoodmenu(int id)
+        {
+            var existingItem = _foodDbContext.FoodInfos.FirstOrDefault(x => x.Id == id);
+            if (existingItem != null)
+            {
+                _foodDbContext.Remove(existingItem);
+                _foodDbContext.SaveChanges();
+                return Ok(existingItem);
+            }
+            return NotFound("Item not found to delete");
+        }
     }
 }
