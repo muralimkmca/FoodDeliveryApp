@@ -1,4 +1,5 @@
 ﻿using FoodyApi.Data;
+using FoodyApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,17 +30,25 @@ namespace FoodyApi.Controllers
         //}
 
         [HttpGet]
-        public async Task<IActionResult> GetFoods()
+        public IActionResult GetFoods()
         {
-            var foodlist = await _foodDbContext.FoodInfos.ToListAsync();
+            var foodlist = _foodDbContext.FoodInfos.ToList();
             return Ok(foodlist);
         }
 
-
         [HttpPost]
-        public string InsertWeather(string Foodname)
+        public IActionResult InsertFoodInfo([FromBody]FoodInfo foods)
         {
-            return string.Format("Your selection is {0}", Foodname);
+            _foodDbContext.FoodInfos.Add(foods);
+            _foodDbContext.SaveChanges();
+
+            return Ok(foods);            
         }
+
+        //[HttpPost]
+        //public string InsertWeather(string Foodname)
+        //{
+        //    return string.Format("Your selection is {0}", Foodname);
+        //}
     }
 }
