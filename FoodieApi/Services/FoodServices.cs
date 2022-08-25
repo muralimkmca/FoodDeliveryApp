@@ -28,5 +28,21 @@ namespace FoodieApi.Services
             await foodcollection.InsertOneAsync(foods);
         }
 
+
+        public async Task<Foods> GetById(string id)
+        {
+           return await foodcollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateFoodDetails(string id,Foods food)
+        {
+            await foodcollection.ReplaceOneAsync(x => x.Id == id, food);
+        }
+
+        public async Task DeleteFoodDetails(string id)
+        {
+            await foodcollection.DeleteOneAsync(x => x.Id == id);
+        }
+
     }
 }
